@@ -24,7 +24,6 @@ public class Driver {
 	
 	public static void main(String[] args) {
 		driver = Driver.getInstance(); //Singleton Pattern
-		
 		driver.users = new ArrayList<User>();
 		
 		//Hard code users for Twitter Simulation.
@@ -81,8 +80,11 @@ public class Driver {
 		
 		//Simulate followings between multiple users.
 		john.addObserver(bob.getNewsFeed()); //Bob is following John
+		john.addObserver(bob.getTimeObserver());
 		john.addObserver(steve.getNewsFeed()); //Steve is following John
+		john.addObserver(steve.getTimeObserver());
 		steve.addObserver(bob.getNewsFeed()); //Bob is following Steve
+		steve.addObserver(bob.getTimeObserver());
 		
 		//John writes a Tweet.
 		john.addTweet("Today is a great day!");

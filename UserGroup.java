@@ -5,12 +5,20 @@ public class UserGroup extends UserComponent { //Composite Pattern
 	ArrayList userComponents = new ArrayList();
 	String groupName;
 	String groupDesc;
+	long creationTime; //Project #3
 	int count;
 	
 	public UserGroup(String groupName, String groupDesc, int count) {
 		this.groupName = groupName;
 		this.groupDesc = groupDesc;
 		this.count = count;
+		creationTime = System.currentTimeMillis();
+		System.out.println(groupName + " was created at " + getCreationTime() + " ms."); //Project #3
+	}
+	
+	//Project #3
+	public long getCreationTime() {
+		return creationTime;
 	}
 	
 	public String getGroupName() {

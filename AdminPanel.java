@@ -1,7 +1,9 @@
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -10,6 +12,7 @@ import javax.swing.event.ListSelectionListener;
 public class AdminPanel extends JFrame implements ActionListener {
 	private Driver driver; 
 	private String[] inList;
+	private boolean valid = true;
 	
     private JButton jButton1;
     private JButton jButton2;
@@ -70,10 +73,10 @@ public class AdminPanel extends JFrame implements ActionListener {
         jTextField2 = new JTextField();
         
         //Disable the Add User and Add Group Buttons.
-        jButton1 = new JButton("Add User");
-        jButton1.setEnabled(false);
-        jButton2 = new JButton("Add Group");
-        jButton2.setEnabled(false);
+        jButton1 = new JButton("Check User Names");
+        jButton1.addActionListener(this);
+        jButton2 = new JButton("Check Last Updated User");
+        jButton2.addActionListener(this);
         
         //To open the User View of currently clicked subject in JList.
         jButton3 = new JButton("Open User View");
@@ -187,6 +190,64 @@ public class AdminPanel extends JFrame implements ActionListener {
 			driver.runLogisticsButton(3);
 		} else if (button.equals("Show Positive Percentage")) {
 			driver.runLogisticsButton(4);
+		} else if (button.equals("Check User Names")) { //Project #3
+			//Grab the UserIDs (Strings) of each User in Application
+			ArrayList<User> temp = driver.getUsers();
+			ArrayList<String> usernames = new ArrayList<String>();
+			for (int i = 0; i < temp.size(); i++) {
+				usernames.add(driver.getUsers().get(i).getID().getUserID());
+			}
+			
+			//Sort the new ArrayList.
+			Collections.sort(usernames);
+			
+			//Check for Duplicates.
+			for (int i = 1; i < usernames.size(); i++) {
+				String previous = usernames.get(i - 1);
+				if (usernames.get(i).equals(previous)) {
+					valid = false;
+				}
+			}
+			
+			//Check for Spaces.
+			for (int i = 0; i < usernames.size(); i++) {
+				if (usernames.get(i).contains(" ")) {
+					valid = false;
+				}
+			}
+			
+			//Prompt the proper message.
+			String message;
+			if (valid) {
+				message = "All Usernames are valid!";
+			} else {
+				message = "There is an invalid Username in the program!";
+			}
+			
+			JOptionPane.showMessageDialog(new JFrame(), message, "Check for Valid Usernames",
+					JOptionPane.INFORMATION_MESSAGE);
+		} else if (button.equals("Check Last Updated User")) { //Project #3
+			//Grab the Users ArrayList.
+			ArrayList<User> temp = driver.getUsers();
+			ArrayList<Long> times = new ArrayList<Long>();
+			for (int i = 0; i < temp.size(); i++) {
+				times.add(driver.getUsers().get(i).getLastUpdateTime());
+			}
+			
+			//Create additional Array to Sort.
+			ArrayList<Long> toSort = new ArrayList<Long>();
+			for (int i = 0; i < times.size(); i++) {
+				toSort.add(times.get(i));
+			}
+			
+			Collections.sort(toSort);
+			
+			//Grab the index of the user with the most recently updated User.
+			int user = times.indexOf(toSort.get(toSort.size() - 1));
+
+			JOptionPane.showMessageDialog(new JFrame(), temp.get(user).getID().getUserID() + 
+					" was the last updated User.", "Check for Last Updated User",
+					JOptionPane.INFORMATION_MESSAGE);
 		}
     }               
 }

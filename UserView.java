@@ -1,5 +1,6 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -35,8 +36,11 @@ public class UserView extends JFrame implements ActionListener {
 			};
 		}
 
+		//Show the timestamp of User Creation.
+		long time = driver.getUsers().get(currentUserIndex).getCreationTime(); //Project #3
+		
 		//Add Labels, Buttons, ScrollPanes, and TextAreas.
-        jLabel2 = new JLabel(name);
+        jLabel2 = new JLabel(name + " (Time Created: " + time + " ms)"); //Project #3
         jButton1 = new JButton("Follow a User");
         jButton1.addActionListener(this);
         jScrollPane1 = new JScrollPane();
